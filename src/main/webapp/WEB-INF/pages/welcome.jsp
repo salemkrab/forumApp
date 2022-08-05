@@ -14,6 +14,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<p>${actor.last_name}</p>
+<p>${actor.nom} - ${actor.id}</p>
 </body>
 </html>
