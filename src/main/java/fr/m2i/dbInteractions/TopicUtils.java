@@ -19,7 +19,7 @@ public class TopicUtils {
 	@SuppressWarnings("unchecked")
 	public List<TopicEnt> findAllTopics() {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 
 		List<TopicEnt> topics;
@@ -37,7 +37,7 @@ public class TopicUtils {
 	
 	public TopicEnt findTopicById(long id) {
 		
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		
 		TopicEnt topic = null;
@@ -57,7 +57,7 @@ public class TopicUtils {
 	@SuppressWarnings("unchecked")
 	public List<TopicEnt> findTopicsByCategory(String category) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 
 		List<TopicEnt> topics;
@@ -77,7 +77,7 @@ public class TopicUtils {
 	@SuppressWarnings("unchecked")
 	public List<TopicEnt> findTopicsByUser(long userId) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 
 		List<TopicEnt> topics;
@@ -96,7 +96,7 @@ public class TopicUtils {
 
 	
 	public boolean insertTopic(String title, String content, String category, UserEnt user) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		TopicEnt topic = new TopicEnt(title, content, category, user);
 		

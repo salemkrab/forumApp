@@ -19,7 +19,7 @@ public class AnswerUtils {
 	@SuppressWarnings("unchecked")
 	public List<AnswerEnt> findAnswersByTopic(long topicId) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 
 		List<AnswerEnt> answers;
@@ -39,7 +39,7 @@ public class AnswerUtils {
 
 	public AnswerEnt findAnswerById(long id) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 
 		AnswerEnt answer = null;
@@ -59,7 +59,7 @@ public class AnswerUtils {
 	@SuppressWarnings("unchecked")
 	public List<AnswerEnt> findAnswersByUser(long userId) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 
 		List<AnswerEnt> answers;
@@ -78,7 +78,7 @@ public class AnswerUtils {
 	}
 
 	public boolean insertAnswer(String content, UserEnt user, TopicEnt topic) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		AnswerEnt answer = new AnswerEnt(content, user, topic);
 

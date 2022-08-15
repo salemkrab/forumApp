@@ -15,7 +15,7 @@ public class UserAccountUtils {
 	EntityManager em;
 	
 	public UserEnt findById(long id) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		return em.find(UserEnt.class, id);
 	}
@@ -24,7 +24,7 @@ public class UserAccountUtils {
 		if (username == null)
 			return null;
 		
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		UserEnt user = null;
 		Query userByEmail = em.createNamedQuery("findUserByUsername", UserEnt.class);
@@ -45,7 +45,7 @@ public class UserAccountUtils {
 		if (username == null || password == null)
 			return null;
 		
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		UserEnt user = null;
 		Query userByEmailPasswd = em.createNamedQuery("findUserByUsernamePassword", UserEnt.class);
@@ -64,7 +64,7 @@ public class UserAccountUtils {
 	}
 	
 	public boolean registerUser(String username, String passwd) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("zbzbgb566al1ilvj");
 		em = factory.createEntityManager();
 		UserEnt user = new UserEnt(username, DigestUtils.sha1Hex(passwd));
 		

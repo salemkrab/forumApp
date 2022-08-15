@@ -55,7 +55,7 @@ public class WelcomeServlet extends HttpServlet {
 		if ("/welcome/auth/logout".equals(requestUri)) {
 			AuthenticationService authService = new AuthenticationService();
 			authService.logout(request.getSession());
-			response.sendRedirect("/ForumApp/welcome/home");
+			response.sendRedirect(request.getContextPath() + "/welcome/home");
 			return;
 		}
 
@@ -116,7 +116,7 @@ public class WelcomeServlet extends HttpServlet {
 				String pageTitle = "ForumApp - Register Fail";
 				this.selectView(request, response, viewname, pageTitle);
 			} else {
-				response.sendRedirect("/ForumApp/welcome/auth/login");
+				response.sendRedirect("/welcome/auth/login");
 			}
 		}
 
@@ -129,7 +129,7 @@ public class WelcomeServlet extends HttpServlet {
 			} else if (outcome.equals("not_found")) {
 				request.setAttribute("loginFail", "not_found");
 			} else {
-				response.sendRedirect("/ForumApp/welcome/home");
+				response.sendRedirect(request.getContextPath() + "/welcome/home");
 			}
 			if (outcome.equals("empty") || outcome.equals("not_found")) {
 				String viewname = PAGES.get("/welcome/auth/login");
@@ -147,7 +147,7 @@ public class WelcomeServlet extends HttpServlet {
 			} else if (outcome.equals("notLogged")) {
 				request.setAttribute("newTopicFail", "notLogged");
 			} else {
-				response.sendRedirect("/ForumApp/welcome/home");
+				response.sendRedirect(request.getContextPath() +"/welcome/home");
 			}
 			if (outcome.equals("empty") || outcome.equals("notLogged")) {
 				String viewname = PAGES.get("/welcome/thread/new");
