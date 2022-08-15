@@ -16,18 +16,15 @@ public class AuthenticationService {
 	
 	public String registerUser(HttpServletRequest request) {
 		String username = request.getParameter("username");
-		String password= request.getParameter("password");
+		String password = request.getParameter("password");
 		if (username.isEmpty() || password.isEmpty()) {
 			return "empty";
-		}
-		else {
-			boolean success = usertools.registerUser(username, password);
-			if (success) {
-				return "ok";
-			}
+		} else if (usertools.findByUsername(username) != null) {
 			return "availability";
+		} else {
+			usertools.registerUser(username, password);
+			return "ok";
 		}
-
 	}
 
 	public String signIn(HttpServletRequest request, HttpSession session) {
