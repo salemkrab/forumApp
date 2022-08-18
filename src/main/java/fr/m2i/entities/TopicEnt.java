@@ -12,13 +12,13 @@ import javax.persistence.*;
  *
  */
 @Entity
-@NamedQueries({ 
-	@NamedQuery(name = "findTopicById", query = "select t from TopicEnt t where t.id = :topicId"),
-	@NamedQuery(name = "findTopicsByCategory", query = "select t from TopicEnt t where t.category = :category"),
-	@NamedQuery(name = "findTopicsByUser", query = "select t from TopicEnt t where t.user.id = :userId"),
-	@NamedQuery(name = "findAllTopics", query = "select t from TopicEnt t"),
-})
-@Table(name="topics")
+@NamedQueries({ @NamedQuery(name = "findTopicById", query = "select t from TopicEnt t where t.id = :topicId"),
+		@NamedQuery(name = "findTopicsByCategory", query = "select t from TopicEnt t where t.category = :category"),
+		@NamedQuery(name = "findTopicsByUserOrderByDateDesc", query = "select t from TopicEnt t where t.user.id = :userId"
+				+ " order by t.creationDate desc"),
+		@NamedQuery(name = "findTopicsByUser", query = "select t from TopicEnt t where t.user.id = :userId"),
+		@NamedQuery(name = "findAllTopics", query = "select t from TopicEnt t"), })
+@Table(name = "topics")
 public class TopicEnt implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +30,8 @@ public class TopicEnt implements Serializable {
 		this.title = title;
 		this.content = content;
 		this.category = category;
-		this.creationDate = Calendar.getInstance();;
+		this.creationDate = Calendar.getInstance();
+		;
 		this.user = user;
 		this.answers = new LinkedList<>();
 	}
@@ -56,10 +57,10 @@ public class TopicEnt implements Serializable {
 	private Calendar creationDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable=false)
+	@JoinColumn(nullable = false)
 	private UserEnt user;
 
-	@OneToMany(mappedBy = "topic", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "topic", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private List<AnswerEnt> answers;
 
 	public long getId() {

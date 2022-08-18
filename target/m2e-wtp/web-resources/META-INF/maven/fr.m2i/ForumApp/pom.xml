@@ -33,7 +33,11 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-
+<dependency>
+    <groupId>javax</groupId>
+    <artifactId>javaee-api</artifactId>
+    <version>8.0</version>
+</dependency>
 
 		<!-- SERVLET ET JSTL -->
 		<dependency>
@@ -155,6 +159,20 @@
 				<plugin>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>3.1.0</version>
+					<configuration>
+    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+        <filesets>
+            <fileset>
+                <directory>target</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>dependency</exclude>
+                </excludes>
+            </fileset>
+        </filesets>
+</configuration>
 				</plugin>
 				<!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
 				<plugin>

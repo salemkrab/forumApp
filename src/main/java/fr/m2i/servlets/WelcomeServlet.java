@@ -1,6 +1,9 @@
 package fr.m2i.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,7 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 import fr.m2i.dbInteractions.TopicUtils;
+import fr.m2i.dbInteractions.UserAccountUtils;
+import fr.m2i.entities.TopicEnt;
+import fr.m2i.entities.UserEnt;
 import fr.m2i.services.AnswerService;
 import fr.m2i.services.AuthenticationService;
 import fr.m2i.services.TopicsService;
@@ -26,8 +33,16 @@ public class WelcomeServlet extends HttpServlet {
 	private static final String PAGE = "/WEB-INF/pages/index.jsp";
 	private static final Map<String, String> PAGES;
 	private static final Map<String, String> TITLES;
+	private static final List<String> CATEGORIES;
 
 	static {
+		CATEGORIES = new ArrayList<>();
+		CATEGORIES.add("JavaSE");
+		CATEGORIES.add("JavaEE");
+		CATEGORIES.add("JPA-Hibernate");
+		CATEGORIES.add("Spring");
+		CATEGORIES.add("Web");
+
 		PAGES = new TreeMap<String, String>();
 		PAGES.put("/welcome/home", "home.jsp");
 		PAGES.put("/welcome/admin", "admin.jsp");
@@ -37,6 +52,8 @@ public class WelcomeServlet extends HttpServlet {
 		PAGES.put("/welcome/thread/id/", "thread.jsp");
 		PAGES.put("/welcome/thread/new", "newTopic.jsp");
 		PAGES.put("/welcome/category/", "home.jsp");
+		PAGES.put("/welcome/user/", "user-profile.jsp");
+		PAGES.put("/welcome/404/", "404page.jsp");
 
 		TITLES = new TreeMap<String, String>();
 		TITLES.put("/welcome/home", "Home page");
@@ -62,21 +79,36 @@ public class WelcomeServlet extends HttpServlet {
 		if (requestUri != null && requestUri.contains("/welcome/thread/id/")) {
 			TopicUtils topicUt = new TopicUtils();
 			long topicId = Long.valueOf(requestUri.substring(requestUri.lastIndexOf("/") + 1));
-			request.setAttribute("topic", topicUt.findTopicById(topicId));
-			String viewname = PAGES.get("/welcome/thread/id/");
-			String pageTitle = "thread";
-			this.selectView(request, response, viewname, pageTitle);
-			return;
+			TopicEnt topic = topicUt.findTopicById(topicId);
+			if (topic == null) {
+				String viewname = PAGES.get("/welcome/404/");
+				String pageTitle = "Oups ! - 404";
+				this.selectView(request, response, viewname, pageTitle);
+				return;
+			} else {
+				request.setAttribute("topic", topic);
+				String viewname = PAGES.get("/welcome/thread/id/");
+				String pageTitle = "thread";
+				this.selectView(request, response, viewname, pageTitle);
+				return;
+			}
 		}
 
 		if (requestUri != null && !requestUri.isEmpty() && requestUri.contains("/welcome/category/")) {
-			TopicUtils topicUt = new TopicUtils();
 			String categ = requestUri.substring(requestUri.lastIndexOf("/") + 1);
-			request.setAttribute("topics", topicUt.findTopicsByCategory(categ));
-			request.setAttribute("tableTitle", categ);
-			String viewname = PAGES.get("/welcome/category/");
-			this.selectView(request, response, viewname, categ);
-			return;
+			if (!CATEGORIES.contains(categ)) {
+				String viewname = PAGES.get("/welcome/404/");
+				String pageTitle = "Oups ! - 404";
+				this.selectView(request, response, viewname, pageTitle);
+				return;
+			} else {
+				TopicUtils topicUt = new TopicUtils();
+				request.setAttribute("topics", topicUt.findTopicsByCategory(categ));
+				request.setAttribute("tableTitle", categ);
+				String viewname = PAGES.get("/welcome/category/");
+				this.selectView(request, response, viewname, categ);
+				return;
+			}
 		}
 
 		if ("/welcome/home".equals(requestUri)) {
@@ -84,6 +116,29 @@ public class WelcomeServlet extends HttpServlet {
 			request.setAttribute("topics", topicUt.findAllTopics());
 			request.setAttribute("tableTitle", "All topics");
 		}
+
+		if (requestUri != null && requestUri.contains("/welcome/user/")) {
+			UserAccountUtils userUtil = new UserAccountUtils();
+			long userId = Long.valueOf(requestUri.substring(requestUri.lastIndexOf("/") + 1));
+			UserEnt user = userUtil.findById(userId);
+			request.setAttribute("user", user);
+			request.setAttribute("userDates", userUtil.findUserDates(userId));
+			String viewname = PAGES.get("/welcome/user/");
+			String pageTitle = "User - "+user.getUsername();
+
+			this.selectView(request, response, viewname, pageTitle);
+			return;
+		}
+		
+		if (requestUri != null && requestUri.contains("/welcome/thread/delete/")) {
+			TopicUtils topicUt = new TopicUtils();
+			long deleteTopicId = Long.valueOf(requestUri.substring(requestUri.lastIndexOf("/") + 1));
+			topicUt.removeTopic(deleteTopicId);
+			
+			response.sendRedirect(request.getContextPath() + "/welcome/home");
+			return;
+		}
+		
 
 		if (requestUri != null && !requestUri.isEmpty() && PAGES.containsKey(requestUri)) {
 			String viewname = PAGES.get(requestUri);
@@ -116,7 +171,7 @@ public class WelcomeServlet extends HttpServlet {
 				String pageTitle = "ForumApp - Register Fail";
 				this.selectView(request, response, viewname, pageTitle);
 			} else {
-				response.sendRedirect("/welcome/auth/login");
+				response.sendRedirect(request.getContextPath() + "/welcome/auth/login");
 			}
 		}
 
@@ -147,7 +202,7 @@ public class WelcomeServlet extends HttpServlet {
 			} else if (outcome.equals("notLogged")) {
 				request.setAttribute("newTopicFail", "notLogged");
 			} else {
-				response.sendRedirect(request.getContextPath() +"/welcome/home");
+				response.sendRedirect(request.getContextPath() + "/welcome/home");
 			}
 			if (outcome.equals("empty") || outcome.equals("notLogged")) {
 				String viewname = PAGES.get("/welcome/thread/new");

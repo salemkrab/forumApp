@@ -9,10 +9,6 @@
 		<section class="w-100 p-4 d-flex align-items-center pb-4 flex-column">
 
 			<h3 class="display-5 fw-bold">Create new topic</h3>
-			<div class="alert alert-info" role="alert">You must be logged
-				in to create a new topic.</div>
-
-
 
 			<form style="width: 26rem;" class="d-block"
 				action="<c:url value="/welcome/thread/new" />" method="post">

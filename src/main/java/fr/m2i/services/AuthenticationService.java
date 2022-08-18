@@ -49,4 +49,12 @@ public class AuthenticationService {
 	public boolean isLogged(HttpSession session) {
 		return (session.getAttribute("userId") != null);
 	}
+	
+	public Long logguedUserId(HttpSession session) {
+		if (this.isLogged(session)) {
+			long userId = (long) session.getAttribute("userId");
+			return userId;
+		}
+		return null;
+	}
 }

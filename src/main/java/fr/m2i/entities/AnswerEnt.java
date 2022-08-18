@@ -14,6 +14,8 @@ import javax.persistence.*;
 	@NamedQuery(name = "findAnswerById", query = "select a from AnswerEnt a where a.id = :answerId"),
 	@NamedQuery(name = "findAnswersByTopic", query = "select a from AnswerEnt a where a.topic.id = :topicId"),
 	@NamedQuery(name = "findAnswersByUser", query = "select a from AnswerEnt a where a.user.id = :userId"),
+	@NamedQuery(name = "findUserAnswersOrderByDateDesc", query="select a from AnswerEnt a where a.user.id = :userId "
+			+ "order by a.creationDate desc"),
 })
 @Table(name="answers")
 public class AnswerEnt implements Serializable {

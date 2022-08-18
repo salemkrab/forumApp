@@ -44,7 +44,6 @@
 	</tbody>
 </table>
 
-
 <div class="col-6 offset-3 d-flex justify-content-center my-5">
 	<a href="<c:url value="/welcome/thread/new" />"
 		class="btn btn-secondary btn-lg">Create new post</a>

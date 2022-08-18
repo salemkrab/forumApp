@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
 	version="2.1">
-	<persistence-unit name="zbzbgb566al1ilvj">
+	<persistence-unit name="ForumApp">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>fr.m2i.entities.AnswerEnt</class>
 		<class>fr.m2i.entities.TopicEnt</class>
