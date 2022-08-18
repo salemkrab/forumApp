@@ -66,7 +66,9 @@
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end"
 							aria-labelledby="navbarDropdownMenuAvatar">
-							<li><a class="dropdown-item" href="#">My profile</a></li>
+							<li><a class="dropdown-item"
+								href="<c:url value="/welcome/user/${sessionScope.userId}" />">My
+									profile</a></li>
 							<li><a class="dropdown-item"
 								href="<c:url value="/welcome/auth/logout" />">Logout</a></li>
 						</ul>
