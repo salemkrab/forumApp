@@ -21,9 +21,9 @@ public class AnswerUtils {
 	
 	static {
 		PERSUNITPROPS_MAP = new HashMap<>();
-		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.url",System.getenv("jawdb_url"));
-		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.user",System.getenv("jawdb_user"));
-		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.password",System.getenv("jawdb_passwd"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.url",System.getenv("jawsdb_url"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.user",System.getenv("jawsdb_user"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.password",System.getenv("jawsdb_passwd"));
 	}
 
 	@SuppressWarnings("unchecked")
