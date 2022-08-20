@@ -1,6 +1,8 @@
 package fr.m2i.dbInteractions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,14 +14,24 @@ import fr.m2i.entities.TopicEnt;
 import fr.m2i.entities.UserEnt;
 
 public class TopicUtils {
-	EntityManagerFactory factory;
-	EntityManager em;
-
+	private static EntityManagerFactory factory;
+	private static EntityManager em;
+	private static final Map<String, String> PERSUNITPROPS_MAP;
+	
+	static {
+		PERSUNITPROPS_MAP = new HashMap<>();
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.url",System.getenv("jawsdb_url"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.user",System.getenv("jawsdb_user"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.password",System.getenv("jawsdb_passwd"));
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<TopicEnt> findAllTopics() {
+		for (String key : PERSUNITPROPS_MAP.keySet()) {
+			System.out.println(key + "  :: " + PERSUNITPROPS_MAP.get(key));
+		}
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 
 		List<TopicEnt> topics;
@@ -37,7 +49,7 @@ public class TopicUtils {
 	
 	public TopicEnt findTopicById(long id) {
 		
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		
 		TopicEnt topic = null;
@@ -57,7 +69,7 @@ public class TopicUtils {
 	@SuppressWarnings("unchecked")
 	public List<TopicEnt> findTopicsByCategory(String category) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 
 		List<TopicEnt> topics;
@@ -77,7 +89,7 @@ public class TopicUtils {
 	@SuppressWarnings("unchecked")
 	public List<TopicEnt> findTopicsByUser(long userId) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 
 		List<TopicEnt> topics;
@@ -96,7 +108,7 @@ public class TopicUtils {
 
 	
 	public boolean insertTopic(String title, String content, String category, UserEnt user) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		TopicEnt topic = new TopicEnt(title, content, category, user);
 		
@@ -123,7 +135,7 @@ public class TopicUtils {
 	}
 	
 	public boolean removeTopic(long topicId) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp",PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		
 		TopicEnt topicToDelete = em.find(TopicEnt.class, topicId);

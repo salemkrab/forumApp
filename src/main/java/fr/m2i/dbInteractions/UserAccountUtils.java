@@ -3,7 +3,6 @@ package fr.m2i.dbInteractions;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,11 +17,19 @@ import fr.m2i.entities.TopicEnt;
 import fr.m2i.entities.UserEnt;
 
 public class UserAccountUtils {
-	EntityManagerFactory factory;
-	EntityManager em;
+	private static EntityManagerFactory factory;
+	private static EntityManager em;
+	private static final Map<String, String> PERSUNITPROPS_MAP;
+	
+	static {
+		PERSUNITPROPS_MAP = new HashMap<>();
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.url",System.getenv("jawdb_url"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.user",System.getenv("jawdb_user"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.password",System.getenv("jawdb_passwd"));
+	}
 	
 	public UserEnt findById(long id) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		return em.find(UserEnt.class, id);
 	}
@@ -31,7 +38,7 @@ public class UserAccountUtils {
 		if (username == null)
 			return null;
 		
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		UserEnt user = null;
 		Query userByEmail = em.createNamedQuery("findUserByUsername", UserEnt.class);
@@ -52,7 +59,7 @@ public class UserAccountUtils {
 		if (username == null || password == null)
 			return null;
 		
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		UserEnt user = null;
 		Query userByEmailPasswd = em.createNamedQuery("findUserByUsernamePassword", UserEnt.class);
@@ -71,7 +78,7 @@ public class UserAccountUtils {
 	}
 	
 	public boolean registerUser(String username, String passwd) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		UserEnt user = new UserEnt(username, DigestUtils.sha1Hex(passwd));
 		
@@ -97,7 +104,7 @@ public class UserAccountUtils {
 	}
 	
 	public Map<String, Calendar> findUserDates(long userId) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp",PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		Map<String, Calendar> userDates = new HashMap<>();
 		
@@ -108,9 +115,9 @@ public class UserAccountUtils {
 			answ = (AnswerEnt) userLastAnswerQuery.setMaxResults(1).getSingleResult();
 			userDates.put("last-answer", answ.getCreationDate());
 		} catch (NoResultException nre) {
-			Calendar notDate = Calendar.getInstance();
-			notDate.set(1970, 1, 1);
-			userDates.put("last-answer", notDate);
+			Calendar noDate = Calendar.getInstance();
+			noDate.set(1970, 1, 1);
+			userDates.put("last-answer", noDate);
 		} 
 		
 		TopicEnt top;
@@ -120,9 +127,9 @@ public class UserAccountUtils {
 			top = (TopicEnt) userLastTopicQuery.setMaxResults(1).getSingleResult();
 			userDates.put("last-topic", top.getCreationDate());
 		} catch (NoResultException nre) {
-			Calendar notDate = Calendar.getInstance();
-			notDate.set(1970, 1, 1);
-			userDates.put("last-topic", notDate);
+			Calendar noDate = Calendar.getInstance();
+			noDate.set(1970, 1, 1);
+			userDates.put("last-topic", noDate);
 		}
 		
 		em.close();

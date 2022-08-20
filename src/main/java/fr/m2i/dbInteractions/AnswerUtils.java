@@ -1,6 +1,8 @@
 package fr.m2i.dbInteractions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,13 +15,21 @@ import fr.m2i.entities.TopicEnt;
 import fr.m2i.entities.UserEnt;
 
 public class AnswerUtils {
-	EntityManagerFactory factory;
-	EntityManager em;
+	private static EntityManagerFactory factory;
+	private static EntityManager em;
+	private static final Map<String, String> PERSUNITPROPS_MAP;
+	
+	static {
+		PERSUNITPROPS_MAP = new HashMap<>();
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.url",System.getenv("jawdb_url"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.user",System.getenv("jawdb_user"));
+		PERSUNITPROPS_MAP.put("javax.persistence.jdbc.password",System.getenv("jawdb_passwd"));
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<AnswerEnt> findAnswersByTopic(long topicId) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 
 		List<AnswerEnt> answers;
@@ -39,7 +49,7 @@ public class AnswerUtils {
 
 	public AnswerEnt findAnswerById(long id) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 
 		AnswerEnt answer = null;
@@ -59,7 +69,7 @@ public class AnswerUtils {
 	@SuppressWarnings("unchecked")
 	public List<AnswerEnt> findAnswersByUser(long userId) {
 
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 
 		List<AnswerEnt> answers;
@@ -78,7 +88,7 @@ public class AnswerUtils {
 	}
 
 	public boolean insertAnswer(String content, UserEnt user, TopicEnt topic) {
-		factory = Persistence.createEntityManagerFactory("ForumApp");
+		factory = Persistence.createEntityManagerFactory("ForumApp", PERSUNITPROPS_MAP);
 		em = factory.createEntityManager();
 		AnswerEnt answer = new AnswerEnt(content, user, topic);
 
